@@ -32,13 +32,13 @@ new cdkVpcTwosubnet(app, configjson.APP_NAME.biyiktest.Name + "-vpc1", {
   region: configjson.env.region
 });
 
-// new cdkVpcThreesubnet(app, configjson.APP_NAME.biyiktest.Name + "-vpc2", {
-//   env: { account: configjson.env.accountnumber, region: configjson.env.region },
-//   APP_NAME: configjson.APP_NAME.biyiktest.Name,
-//   LABEL: configjson.APP_NAME.biyiktest.LABEL,
-//   domainName: configjson.domainName,
-//   region: configjson.env.region
-// });
+new cdkVpcThreesubnet(app, configjson.APP_NAME.biyiktest.Name + "-vpc2", {
+  env: { account: configjson.env.accountnumber, region: configjson.env.region },
+  APP_NAME: configjson.APP_NAME.biyiktest.Name,
+  LABEL: configjson.APP_NAME.biyiktest.LABEL,
+  domainName: configjson.domainName,
+  region: configjson.env.region
+});
 
 new route53Settings(app, configjson.APP_NAME.biyiktest.Name + "-route53", {
   env: { account: configjson.env.accountnumber, region: configjson.env.region },
