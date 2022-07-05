@@ -17,13 +17,23 @@ interface route53SettingsProps extends StackProps {
 export class route53Settings extends Stack {
   static dnsNamespace: servicediscovery.PrivateDnsNamespace;
   static myHostedZone: route53.IHostedZone;
+  static myPrivateHostedZone: route53.IHostedZone;
+
   constructor(scope: Construct, id: string, props: route53SettingsProps) {
     super(scope, id, props);
-    props.myvpc.selectSubnets({ subnetType: ec2.SubnetType.PRIVATE_ISOLATED });
-    const myHostedZone = route53.HostedZone.fromLookup(this, 'MyHostedZone', {
-        domainName: props.domainName
-      });
-      route53Settings.myHostedZone = myHostedZone;
+
+    props.myvpc.selectSubnets({ subnetType: ec2.SubnetType.PUBLIC });
+
+    // Route 53
+    const myHostedZone = new route53.HostedZone(this, 'MyHostedZone', { zoneName: props.domainName });
+
+    route53Settings.myHostedZone = myHostedZone;
+
+    // Cloud Map
+    const myPrivateHostedZone = new route53.PrivateHostedZone(this, 'HostedZone', {
+      zoneName: 'private.' + props.domainName,
+      vpc: props.myvpc,    // At least one VPC has to be added to a Private Hosted Zone.
+    });
   
       //1 wild-card ssl certificate
       const sslcertificiate = new acm.Certificate(this, 'Certificate', {
@@ -31,15 +41,5 @@ export class route53Settings extends Stack {
         validation: acm.CertificateValidation.fromDns(myHostedZone),
       });
 
-      // const dnsNamespace = new servicediscovery.PrivateDnsNamespace(
-      //   this,
-      //   "PrivateDnsNamespace",
-      //   {
-      //     name: "biyik" + "." + props.domainName,
-      //     vpc: props.myvpc,
-      //     description: "Private CloudMap Domain Name"
-      //   }
-      // );
-      // route53Settings.dnsNamespace = dnsNamespace;
   }
 }

@@ -5,6 +5,7 @@ import { CdkDemoStack } from '../lib/cdk-demo-stack';
 import { cdkVpcTwosubnet } from '../lib/cdk-vpc-twosubnet';
 import { cdkVpcThreesubnet } from '../lib/cdk-vpc-threesubnet';
 import { route53Settings } from '../lib/cdk-route53-settings';
+import { LBSettings } from '../lib/cdk-LB-Creation';
 import * as utils from '../util';
 const app = new cdk.App();
 const  configjson = utils.readJSON("./bin/config.json");
@@ -40,6 +41,15 @@ new cdkVpcTwosubnet(app, configjson.APP_NAME.biyiktest.Name + "-vpc1", {
 // });
 
 new route53Settings(app, configjson.APP_NAME.biyiktest.Name + "-route53", {
+  env: { account: configjson.env.accountnumber, region: configjson.env.region },
+  APP_NAME: configjson.APP_NAME.biyiktest.Name,
+  LABEL: configjson.APP_NAME.biyiktest.LABEL,
+  domainName: configjson.domainName,
+  region: configjson.env.region,
+  myvpc: cdkVpcTwosubnet.myvpc,
+});
+
+new LBSettings(app, configjson.APP_NAME.biyiktest.Name + "-LB", {
   env: { account: configjson.env.accountnumber, region: configjson.env.region },
   APP_NAME: configjson.APP_NAME.biyiktest.Name,
   LABEL: configjson.APP_NAME.biyiktest.LABEL,
