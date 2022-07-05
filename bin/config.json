@@ -1,0 +1,14 @@
+{
+    "APP_NAME": {
+        "biyiktest":{
+            "Name": "rbiyiktest",
+            "LABEL": "test",
+            "AWS_REGION": "paris"
+        }
+    },
+    "env": {
+        "accountnumber": "132248825767",
+        "region": "eu-west-3"
+    },
+    "domainName": "test.io"      
+}
